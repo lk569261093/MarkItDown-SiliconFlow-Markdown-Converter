@@ -9,8 +9,12 @@
 - 支持 SiliconFlow 流式输出，对 Markdown 二次整理（结构修复、公式规范化）。
 - 支持单文件下载与 ZIP 打包下载。
 - 支持调用 `/models` 接口拉取可用模型。
+<<<<<<< HEAD
 - API Key 输入框为密码模式，并提供脱敏预览，避免明文泄露。
 - 已默认包含 `markitdown[pdf]` 依赖，可直接处理 PDF 文件。
+=======
+
+>>>>>>> e9a03f6c044ff192bca4785d1f507873b1ee1aa0
 
 ## 当前默认配置（可在界面修改）
 
@@ -69,11 +73,15 @@ streamlit run app.py
 
 ## 模型建议
 
+<<<<<<< HEAD
 - 默认推荐：`deepseek-ai/DeepSeek-R1`
 - 如需尝试其他模型，保持“默认 R1 + 可手动切换”的方式即可。
+=======
+- 默认推荐：`deepseek-ai/DeepSeek-R1`（当前测试效果最佳）。
+>>>>>>> e9a03f6c044ff192bca4785d1f507873b1ee1aa0
 
-## GitHub 上传建议
 
+<<<<<<< HEAD
 - 本项目不保存 API Key 明文。
 - 已提供 `.gitignore`，忽略缓存、虚拟环境、备份文件等本地内容。
 - 已提供 `runtime.txt`（`python-3.10`）以减少云端环境差异。
@@ -86,6 +94,8 @@ streamlit run app.py
 2. 在 Streamlit Cloud 中执行 **Reboot app** 和 **Clear cache** 后重新部署。
 3. 查看构建日志，确认已安装 `markitdown[pdf]`、`pdfplumber`、`pdfminer.six`。
 4. 若仍失败，删除旧应用后新建一次（避免旧镜像缓存）。
+=======
+>>>>>>> e9a03f6c044ff192bca4785d1f507873b1ee1aa0
 
 ## 参考链接
 
