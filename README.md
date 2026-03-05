@@ -10,6 +10,7 @@
 - 支持单文件下载与 ZIP 打包下载。
 - 支持调用 `/models` 接口拉取可用模型。
 - API Key 输入框为密码模式，并提供脱敏预览，避免明文泄露。
+- 已默认包含 `markitdown[pdf]` 依赖，可直接处理 PDF 文件。
 
 ## 当前默认配置（可在界面修改）
 
@@ -19,7 +20,6 @@
 - Max Tokens: `4096`
 - Chunk Size: `12000`
 
-> 你的实测结果显示 DeepSeek-R1 效果最好，仓库默认已切换为该模型。
 
 ## 项目结构
 
@@ -27,6 +27,7 @@
 mdtools/
 ├─ app.py
 ├─ requirements.txt
+├─ runtime.txt
 ├─ .gitignore
 ├─ .streamlit/
 │  └─ config.toml
@@ -51,6 +52,9 @@ python -m venv .venv
 # 3) 安装依赖（清华镜像）
 pip install -i https://pypi.tuna.tsinghua.edu.cn/simple -r requirements.txt
 
+# 如果你是旧环境升级，单独补齐 PDF 依赖
+pip install -i https://pypi.tuna.tsinghua.edu.cn/simple -U "markitdown[pdf]"
+
 # 4) 启动
 streamlit run app.py
 ```
@@ -65,18 +69,23 @@ streamlit run app.py
 
 ## 模型建议
 
-- 默认推荐：`deepseek-ai/DeepSeek-R1`（你当前测试效果最佳）。
+- 默认推荐：`deepseek-ai/DeepSeek-R1`
 - 如需尝试其他模型，保持“默认 R1 + 可手动切换”的方式即可。
 
 ## GitHub 上传建议
 
 - 本项目不保存 API Key 明文。
 - 已提供 `.gitignore`，忽略缓存、虚拟环境、备份文件等本地内容。
-- 推送前建议执行一次：
+- 已提供 `runtime.txt`（`python-3.10`）以减少云端环境差异。
 
-```bash
-python -m py_compile app.py src\mdtools\*.py
-```
+## Streamlit Cloud 部署排错（PDF 依赖）
+
+如果云端出现 `PdfConverter MissingDependencyException`，按下面顺序处理：
+
+1. 确认部署分支已包含最新 `requirements.txt` 与 `runtime.txt`。
+2. 在 Streamlit Cloud 中执行 **Reboot app** 和 **Clear cache** 后重新部署。
+3. 查看构建日志，确认已安装 `markitdown[pdf]`、`pdfplumber`、`pdfminer.six`。
+4. 若仍失败，删除旧应用后新建一次（避免旧镜像缓存）。
 
 ## 参考链接
 

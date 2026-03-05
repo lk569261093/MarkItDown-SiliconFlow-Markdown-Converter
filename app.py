@@ -3,6 +3,8 @@
 import io
 import zipfile
 from datetime import datetime
+from importlib.metadata import PackageNotFoundError, version
+from importlib.util import find_spec
 from pathlib import Path
 from tempfile import TemporaryDirectory
 
@@ -43,6 +45,87 @@ MODEL_GUIDANCE = [
         "Notes": "支持 reasoning_content，适合做公式规范化与逻辑校验。",
     },
 ]
+
+
+@st.cache_data(ttl=600)
+def collect_dependency_report() -> dict:
+    """启动时依赖自检，便于快速定位部署环境问题。"""
+    package_specs = [
+        ("streamlit", "streamlit"),
+        ("markitdown", "markitdown"),
+        ("openai", "openai"),
+        ("requests", "requests"),
+        ("pdfplumber", "pdfplumber"),
+        ("pdfminer.six", "pdfminer"),
+    ]
+
+    package_status: list[dict[str, str]] = []
+    missing_packages: list[str] = []
+    for package_name, module_name in package_specs:
+        installed = find_spec(module_name) is not None
+        if installed:
+            try:
+                package_version = version(package_name)
+            except PackageNotFoundError:
+                package_version = "unknown"
+        else:
+            package_version = "missing"
+            missing_packages.append(package_name)
+
+        package_status.append(
+            {
+                "Package": package_name,
+                "Version": package_version,
+                "Status": "OK" if installed else "Missing",
+            }
+        )
+
+    pdf_converter_ready = False
+    pdf_converter_error = ""
+    try:
+        from markitdown.converters import _pdf_converter
+
+        dep_exc_info = getattr(_pdf_converter, "_dependency_exc_info", None)
+        if dep_exc_info is None:
+            pdf_converter_ready = True
+        elif len(dep_exc_info) > 1 and dep_exc_info[1] is not None:
+            pdf_converter_error = str(dep_exc_info[1])
+    except Exception as exc:
+        pdf_converter_error = str(exc)
+
+    return {
+        "package_status": package_status,
+        "missing_packages": missing_packages,
+        "pdf_converter_ready": pdf_converter_ready,
+        "pdf_converter_error": pdf_converter_error,
+    }
+
+
+def render_dependency_self_check() -> None:
+    """渲染依赖自检提示。"""
+    report = collect_dependency_report()
+
+    with st.expander("Startup Dependency Self-Check", expanded=True):
+        if not report["missing_packages"] and report["pdf_converter_ready"]:
+            st.success("Dependency check passed. PDF conversion is available.")
+        else:
+            st.warning("Dependency check found issues. Please fix before large-scale conversion.")
+
+        st.table(report["package_status"])
+
+        if report["missing_packages"]:
+            st.error(f"Missing packages: {', '.join(report['missing_packages'])}")
+
+        if not report["pdf_converter_ready"]:
+            detail = report["pdf_converter_error"] or "Unknown dependency issue in PdfConverter."
+            st.error(f"PdfConverter dependency check failed: {detail}")
+
+        if report["missing_packages"] or not report["pdf_converter_ready"]:
+            st.code("pip install -i https://pypi.tuna.tsinghua.edu.cn/simple -r requirements.txt")
+            st.code(
+                "pip install -i https://pypi.tuna.tsinghua.edu.cn/simple -U "
+                "\"markitdown[pdf]\" pdfplumber pdfminer.six"
+            )
 
 
 def mask_api_key(api_key: str) -> str:
@@ -290,6 +373,7 @@ def main() -> None:
         "Upload PDF/Word and other supported files, convert via MarkItDown, "
         "then optionally refine Markdown using SiliconFlow streaming output."
     )
+    render_dependency_self_check()
 
     options = render_sidebar()
 
