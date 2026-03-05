@@ -73,15 +73,13 @@ streamlit run app.py
 
 ## 模型建议
 
-<<<<<<< HEAD
+
 - 默认推荐：`deepseek-ai/DeepSeek-R1`
 - 如需尝试其他模型，保持“默认 R1 + 可手动切换”的方式即可。
-=======
 - 默认推荐：`deepseek-ai/DeepSeek-R1`（当前测试效果最佳）。
->>>>>>> e9a03f6c044ff192bca4785d1f507873b1ee1aa0
 
 
-<<<<<<< HEAD
+
 - 本项目不保存 API Key 明文。
 - 已提供 `.gitignore`，忽略缓存、虚拟环境、备份文件等本地内容。
 - 已提供 `runtime.txt`（`python-3.10`）以减少云端环境差异。
@@ -94,8 +92,7 @@ streamlit run app.py
 2. 在 Streamlit Cloud 中执行 **Reboot app** 和 **Clear cache** 后重新部署。
 3. 查看构建日志，确认已安装 `markitdown[pdf]`、`pdfplumber`、`pdfminer.six`。
 4. 若仍失败，删除旧应用后新建一次（避免旧镜像缓存）。
-=======
->>>>>>> e9a03f6c044ff192bca4785d1f507873b1ee1aa0
+
 
 ## 参考链接
 
