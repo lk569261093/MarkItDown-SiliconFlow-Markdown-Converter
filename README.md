@@ -9,7 +9,7 @@
 - 支持 SiliconFlow 流式输出，对 Markdown 二次整理（结构修复、公式规范化）。
 - 支持单文件下载与 ZIP 打包下载。
 - 支持调用 `/models` 接口拉取可用模型。
-- API Key 输入框为密码模式，并提供脱敏预览，避免明文泄露。
+
 
 ## 当前默认配置（可在界面修改）
 
@@ -19,7 +19,6 @@
 - Max Tokens: `4096`
 - Chunk Size: `12000`
 
-> 你的实测结果显示 DeepSeek-R1 效果最好，仓库默认已切换为该模型。
 
 ## 项目结构
 
@@ -65,14 +64,9 @@ streamlit run app.py
 
 ## 模型建议
 
-- 默认推荐：`deepseek-ai/DeepSeek-R1`（你当前测试效果最佳）。
-- 如需尝试其他模型，保持“默认 R1 + 可手动切换”的方式即可。
+- 默认推荐：`deepseek-ai/DeepSeek-R1`（当前测试效果最佳）。
 
-## GitHub 上传建议
 
-- 本项目不保存 API Key 明文。
-- 已提供 `.gitignore`，忽略缓存、虚拟环境、备份文件等本地内容。
-- 推送前建议执行一次：
 
 ```bash
 python -m py_compile app.py src\mdtools\*.py
