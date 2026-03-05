@@ -68,10 +68,6 @@ streamlit run app.py
 
 
 
-```bash
-python -m py_compile app.py src\mdtools\*.py
-```
-
 ## 参考链接
 
 - SiliconFlow 用户指南：https://docs.siliconflow.cn/cn/userguide/introduction
