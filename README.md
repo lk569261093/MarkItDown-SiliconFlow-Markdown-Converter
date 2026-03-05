@@ -1,6 +1,7 @@
 # mdtools
 
 一个可工程化部署的文档转 Markdown 工具，基于 **Streamlit + MarkItDown + SiliconFlow(OpenAI 兼容接口)**。
+需要秘钥可以联系：569261093@qq.com
 
 ## 功能特性
 
